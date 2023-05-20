@@ -13,5 +13,6 @@
         public string Ubicacion { get; set; }
 
         public int MaxCapacidad { get; set; }
+
     }
 }
