@@ -8,5 +8,7 @@ namespace PIA_BackEnd
         public ApplicationDBContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Eventos> Eventos { get; set; }
+
+        public DbSet<UsuarioRegistro> UsuarioRegistro { get; set; }
     }
 }

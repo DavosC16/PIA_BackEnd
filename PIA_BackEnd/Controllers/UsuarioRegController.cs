@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PIA_BackEnd.Controllers
 {
-    [ApiController]
     [Route("api/usuarioregistrado")]
 
     public class UsuarioRegController : ControllerBase
@@ -22,14 +21,28 @@ namespace PIA_BackEnd.Controllers
             this.dbContext = dbContext;
         }
 
-        [HttpPut("/Editar Informacion del Registro")]
-        public async Task<ActionResult> Put(Eventos eventos, int id)
+        [HttpPost("/Editar Informacion del Registro")]
+        public async Task<ActionResult> EditAndCreateNewEvent(int id_us,int id_ev)
         {
-            if (eventos.Id != id)
+            var existingEvent = await dbContext.Eventos.FindAsync(id_ev);
+            if (existingEvent == null)
             {
-                return BadRequest("Id de Evento Inexistente");
+                return NotFound();
             }
-            dbContext.Update(eventos);
+
+            if (existingEvent.MaxCapacidad > 0)
+            {
+                existingEvent.MaxCapacidad = (existingEvent.MaxCapacidad) - 1;
+            }
+            
+            var createdEvent = new UsuarioRegistro
+            {
+                IdUsuario = id_us,
+                IdEvento = id_ev
+
+            };
+
+            dbContext.UsuarioRegistro.Add(createdEvent);
             await dbContext.SaveChangesAsync();
             return Ok();
         }
