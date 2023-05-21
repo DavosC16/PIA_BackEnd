@@ -9,6 +9,8 @@ namespace PIA_BackEnd
 
         public DbSet<Eventos> Eventos { get; set; }
 
+        public DbSet<Usuario> Usuario { get; set; }
+
         public DbSet<UsuarioRegistro> UsuarioRegistro { get; set; }
     }
 }
