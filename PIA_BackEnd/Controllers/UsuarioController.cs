@@ -11,6 +11,7 @@ namespace PIA_BackEnd.Controllers
     [ApiController]
     [Route("usuario")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsUsuario")]
     public class UsuarioController : ControllerBase
     {
         private readonly ApplicationDBContext dbContext;

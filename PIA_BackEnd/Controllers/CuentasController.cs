@@ -34,6 +34,8 @@ namespace PIA_BackEnd.Controllers
 
             if (result.Succeeded)
             {
+                //var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Mail);
+                //await userManager.AddClaimAsync(usuario, new Claim("EsUsuario", "1"));
                 return await ConstruirToken(credenciales);
             }
             else
