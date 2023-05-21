@@ -17,7 +17,7 @@ namespace PIA_BackEnd.Controllers
         private readonly IMapper _mapper;
         private readonly IConfiguration configuration;
 
-        public UsuarioController(ApplicationDBContext dbContext, IMapper mapper)
+        public UsuarioController(ApplicationDBContext dbContext, IMapper mapper, IConfiguration configuration)
         {
             this.dbContext = dbContext;
             _mapper = mapper;
@@ -28,15 +28,31 @@ namespace PIA_BackEnd.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<List<GetUsuarioDTO>>> Get()
         {
-            var alumnos = await dbContext.Usuario.ToListAsync();
-            return _mapper.Map<List<GetUsuarioDTO>>(alumnos);
+            var usuarios = await dbContext.Usuario.ToListAsync();
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Usuario, GetUsuarioDTO>();
+            });
+
+            var mapper = new Mapper(config);
+            var usuariosDTO = mapper.Map<List<GetUsuarioDTO>>(usuarios);
+
+            return usuariosDTO;
         }
+
 
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult> Post([FromBody] UsuarioDTO usuarioDto)
         {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<UsuarioDTO, Usuario>();
+                cfg.CreateMap<Usuario, GetUsuarioDTO>();
+            });
 
+            var mapper = new Mapper(config);
             var existeUsuarioMismoNombre = await dbContext.Usuario.AnyAsync(x => x.Nombre == usuarioDto.Nombre);
 
             if (existeUsuarioMismoNombre)
@@ -44,12 +60,12 @@ namespace PIA_BackEnd.Controllers
                 return BadRequest($"Ya existe un usuario con el nombre {usuarioDto.Nombre}");
             }
 
-            var usuario = _mapper.Map<Usuario>(usuarioDto);
+            var usuario = mapper.Map<Usuario>(usuarioDto);
 
             dbContext.Add(usuario);
             await dbContext.SaveChangesAsync();
 
-            var usuarioDTO = _mapper.Map<GetUsuarioDTO>(usuario);
+            var usuarioDTO = mapper.Map<GetUsuarioDTO>(usuario);
 
             return CreatedAtRoute("obtenerusuario", new { id = usuario.Id }, usuarioDTO);
         }

@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using System.Text.Json.Serialization;
+using PIA_BackEnd.DTOs;
+using PIA_BackEnd.Entidades;
 
 namespace PIA_BackEnd
 {
@@ -76,6 +78,13 @@ namespace PIA_BackEnd
 
             services.AddAutoMapper(typeof(Startup));
 
+            MapperConfiguration mappingConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<UsuarioDTO, Usuario>();
+            });
+
+            services.AddSingleton(mappingConfig.CreateMapper());
+
             services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDBContext>()
             .AddDefaultTokenProviders();
@@ -118,9 +127,14 @@ namespace PIA_BackEnd
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                //endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                name: "obtenerusuario",
+                pattern: "api/usuarios/{id}",
+                defaults: new { controller = "Usuario", action = "Get" }
+                );
+            
             });
-
 
         }
     }

@@ -5,5 +5,6 @@ namespace PIA_BackEnd.DTOs
 
         public string Nombre { get; set; }
 
+        public string Mail { get; set; }
     }
 }
