@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PIA_BackEnd.Entidades;
 
 namespace PIA_BackEnd
 {
-    public class ApplicationDBContext: DbContext
+    public class ApplicationDBContext: IdentityDbContext
     {
         public ApplicationDBContext(DbContextOptions options) : base(options) { }
 

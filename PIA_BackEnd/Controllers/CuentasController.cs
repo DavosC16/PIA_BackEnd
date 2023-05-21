@@ -34,7 +34,6 @@ namespace PIA_BackEnd.Controllers
 
             if (result.Succeeded)
             {
-                //Se retorna el Jwt (Json Web Token) especifica el formato del token que hay que devolverle a los clientes
                 return await ConstruirToken(credenciales);
             }
             else

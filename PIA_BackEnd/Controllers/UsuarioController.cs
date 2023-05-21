@@ -14,13 +14,13 @@ namespace PIA_BackEnd.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly ApplicationDBContext dbContext;
-        private readonly IMapper mapper;
+        private readonly IMapper _mapper;
         private readonly IConfiguration configuration;
 
-        public UsuarioController(ApplicationDBContext dbContext)
+        public UsuarioController(ApplicationDBContext dbContext, IMapper mapper)
         {
             this.dbContext = dbContext;
-            this.mapper = mapper;
+            _mapper = mapper;
             this.configuration = configuration;
         }
 
@@ -29,13 +29,13 @@ namespace PIA_BackEnd.Controllers
         public async Task<ActionResult<List<GetUsuarioDTO>>> Get()
         {
             var alumnos = await dbContext.Usuario.ToListAsync();
-            return mapper.Map<List<GetUsuarioDTO>>(alumnos);
+            return _mapper.Map<List<GetUsuarioDTO>>(alumnos);
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult> Post([FromBody] UsuarioDTO usuarioDto)
         {
-            //Ejemplo para validar desde el controlador con la BD con ayuda del dbContext
 
             var existeUsuarioMismoNombre = await dbContext.Usuario.AnyAsync(x => x.Nombre == usuarioDto.Nombre);
 
@@ -44,14 +44,14 @@ namespace PIA_BackEnd.Controllers
                 return BadRequest($"Ya existe un usuario con el nombre {usuarioDto.Nombre}");
             }
 
-            var usuario = mapper.Map<Usuario>(usuarioDto);
+            var usuario = _mapper.Map<Usuario>(usuarioDto);
 
             dbContext.Add(usuario);
             await dbContext.SaveChangesAsync();
 
-            var usuarioDTO = mapper.Map<GetUsuarioDTO>(usuario);
+            var usuarioDTO = _mapper.Map<GetUsuarioDTO>(usuario);
 
-            return CreatedAtRoute("obteneralumno", new { id = usuario.Id }, usuarioDTO);
+            return CreatedAtRoute("obtenerusuario", new { id = usuario.Id }, usuarioDTO);
         }
     }
 }
