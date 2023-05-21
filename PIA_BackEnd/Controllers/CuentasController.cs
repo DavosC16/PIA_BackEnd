@@ -27,15 +27,15 @@ namespace PIA_BackEnd.Controllers
         }
 
         [HttpPost("registrar")]
-        public async Task<ActionResult<RespuestaAutenticacion>> Registrar(CredencialesUsuario credenciales, EditarAdminDTO editarAdminDTO)
+        public async Task<ActionResult<RespuestaAutenticacion>> Registrar(CredencialesUsuario credenciales)
         {
             var user = new IdentityUser { UserName = credenciales.Mail, Email = credenciales.Mail };
             var result = await userManager.CreateAsync(user, credenciales.Password);
 
             if (result.Succeeded)
             {
-                var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Mail);
-                await userManager.AddClaimAsync(usuario, new Claim("EsUsuario", "1"));
+                //var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Mail);
+                //await userManager.AddClaimAsync(usuario, new Claim("EsUsuario", "1"));
                 return await ConstruirToken(credenciales);
             }
             else

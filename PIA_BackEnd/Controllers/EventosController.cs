@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PIA_BackEnd.Entidades;
 
@@ -63,6 +64,7 @@ namespace PIA_BackEnd.Controllers
         [HttpGet("/Busqueda de Evento")]
         public async Task<ActionResult<List<Eventos>>> Get(string busqueda)
         {
+            
             var exist = await dbContext.Eventos.AnyAsync(e => e.Nombre.Contains(busqueda)|| e.Fecha == busqueda || e.Ubicacion.Contains(busqueda));
 
             if (!exist)
