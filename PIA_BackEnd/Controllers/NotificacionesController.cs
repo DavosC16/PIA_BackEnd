@@ -32,7 +32,7 @@ namespace PIA_BackEnd.Controllers
             else
             {
                 DateTime currentDate = DateTime.Now;
-                TimeSpan dateRange = TimeSpan.FromDays(30); // Adjust the range as needed
+                TimeSpan dateRange = TimeSpan.FromDays(30);
 
                 var listaEventos = dbContext.Eventos
                     .Join(
