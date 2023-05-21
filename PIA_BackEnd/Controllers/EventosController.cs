@@ -74,5 +74,24 @@ namespace PIA_BackEnd.Controllers
                 return await dbContext.Eventos.Where(e => e.Nombre.Contains(busqueda) || e.Fecha == busqueda || e.Ubicacion.Contains(busqueda)).ToListAsync();
             }
         }
+
+        [HttpGet("/Asistentes")]
+        public async Task<ActionResult<List<Usuario>>> Get(int id)
+        {
+            var exist = await dbContext.Eventos.AnyAsync(e => e.Id == id);
+            if (!exist)
+            {
+                return BadRequest("Evento No Encontrado");
+            }
+            else
+            {
+                var listaAsistentes = from user in dbContext.Usuario
+                                      join usreg in dbContext.UsuarioRegistro
+                                      on user.Id equals usreg.IdUsuario
+                                      where usreg.IdEvento == id
+                                      select user;
+                return Ok(listaAsistentes);
+            }
+        }
     }
 }

@@ -69,5 +69,25 @@ namespace PIA_BackEnd.Controllers
 
             return CreatedAtRoute("obtenerusuario", new { id = usuario.Id }, usuarioDTO);
         }
+
+        [HttpGet("/Eventos Registrados")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<Eventos>>> Get(int id)
+        {
+            var exist = await dbContext.Usuario.AnyAsync(x => x.Id == id);
+            if (!exist)
+            {
+                return BadRequest("Usuario Inexistente");
+            }
+            else
+            {
+                var listaEventos = from eventos in dbContext.Eventos
+                                   join usreg in dbContext.UsuarioRegistro
+                                   on eventos.Id equals usreg.IdEvento
+                                   where usreg.IdUsuario == id
+                                   select eventos;
+                return Ok(listaEventos);
+            }
+        }
     }
 }
