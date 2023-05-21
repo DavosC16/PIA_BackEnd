@@ -13,10 +13,10 @@ namespace PIA_BackEnd.Controllers
 {
     [Route("api/usuarioregistrado")]
 
-    public class UsuarioRegController : ControllerBase
+    public class AsistenciaRegistroController : ControllerBase
     {
         private readonly ApplicationDBContext dbContext;
-        public UsuarioRegController(ApplicationDBContext dbContext)
+        public AsistenciaRegistroController(ApplicationDBContext dbContext)
         {
             this.dbContext = dbContext;
         }
@@ -35,7 +35,7 @@ namespace PIA_BackEnd.Controllers
                 existingEvent.MaxCapacidad = (existingEvent.MaxCapacidad) - 1;
             }
             
-            var createdEvent = new UsuarioRegistro
+            var createdEvent = new AsistenciaRegistrada
             {
                 IdUsuario = id_us,
                 IdEvento = id_ev

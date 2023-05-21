@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace PIA_BackEnd.Entidades
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    public class UsuarioRegistro
+    public class AsistenciaRegistrada
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
