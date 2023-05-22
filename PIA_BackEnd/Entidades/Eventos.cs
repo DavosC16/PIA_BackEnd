@@ -4,6 +4,8 @@
     {
         public int Id { get; set; }
 
+        public int IdOrganizador { get; set; }
+
         public string Nombre { get; set; }
 
         public string Fecha { get; set; }

@@ -22,7 +22,7 @@ namespace PIA_BackEnd.Controllers
         }
 
         [HttpPost("/Editar Informacion del Registro")]
-        public async Task<ActionResult> EditAndCreateNewEvent(int id_us,int id_ev)
+        public async Task<ActionResult> CrearAsistencia(int id_us,int id_ev)
         {
             var existingEvent = await dbContext.Eventos.FindAsync(id_ev);
             if (existingEvent == null)
