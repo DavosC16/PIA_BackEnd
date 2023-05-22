@@ -17,7 +17,7 @@ namespace PIA_BackEnd.Controllers
         private readonly ApplicationDBContext dbContext;
         
 
-        public UsuarioController(ApplicationDBContext dbContext, IMapper mapper, IConfiguration configuration)
+        public UsuarioController(ApplicationDBContext dbContext)
         {
             this.dbContext = dbContext;
            
