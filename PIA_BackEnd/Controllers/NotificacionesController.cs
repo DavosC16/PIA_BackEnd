@@ -55,5 +55,47 @@ namespace PIA_BackEnd.Controllers
             }
         }
 
+        [HttpGet("/MisSeguidos")]
+
+        //ingresa id usuario, trae fechas eventos, si evento en menos de 1 mes -> trae notificacion
+
+        public async Task<ActionResult<List<EventoDTO>>> GetSeguidos(int id_usuario)
+        {
+            var exist = await dbContext.Usuario.AnyAsync(u => u.Id == id_usuario);
+            if (!exist)
+            {
+                return BadRequest("Usuario No Encontrado");
+            }
+            else
+            {
+                var idOrganizadorList = dbContext.Seguidor
+                .Where(seguidor => seguidor.IdUsuario == id_usuario)
+                .Select(seguidor => seguidor.IdOrganizador)
+                .ToList();
+
+                DateTime currentDate = DateTime.Now;
+                TimeSpan dateRange = TimeSpan.FromDays(30);
+
+                var listaEventos = dbContext.Eventos
+                    .Join(
+                        dbContext.Seguidor,
+                        evento => evento.IdOrganizador,
+                        seg => seg.IdOrganizador,
+                        (evento, seg) => new { Evento = evento, Seguidor = seg }
+                    )
+                    .Where(joinResult => idOrganizadorList.Contains(joinResult.Seguidor.IdOrganizador))
+                    .AsEnumerable()
+                    .Where(joinResult => DateTime.ParseExact(joinResult.Evento.Fecha, "dd-MM-yyyy", CultureInfo.InvariantCulture) >= currentDate - dateRange &&
+                                         DateTime.ParseExact(joinResult.Evento.Fecha, "dd-MM-yyyy", CultureInfo.InvariantCulture) <= currentDate + dateRange)
+                    .Select(joinResult => new EventoDTO
+                    {
+                        Notificacion = $"La persona que sigues: {joinResult.Evento.IdOrganizador} tendra un evento pronto, {joinResult.Evento.Nombre} es en {(DateTime.ParseExact(joinResult.Evento.Fecha, "dd-MM-yyyy", CultureInfo.InvariantCulture) - currentDate).Days} dias"
+                    })
+                    .ToList();
+
+                return Ok(listaEventos);
+            }
+        }
+
     }
 }
