@@ -21,7 +21,7 @@ namespace PIA_BackEnd.Controllers
             this.dbContext = dbContext;
         }
 
-        [HttpPost("/Editar Informacion del Registro")]
+        [HttpPost("/Ingresar Informacion del Registro")]
         public async Task<ActionResult> CrearAsistencia(int id_us,int id_ev)
         {
             var existingEvent = await dbContext.Eventos.FindAsync(id_ev);
