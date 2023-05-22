@@ -89,7 +89,7 @@ namespace PIA_BackEnd.Controllers
                                          DateTime.ParseExact(joinResult.Evento.Fecha, "dd-MM-yyyy", CultureInfo.InvariantCulture) <= currentDate + dateRange)
                     .Select(joinResult => new EventoDTO
                     {
-                        Notificacion = $"La persona que sigues: {joinResult.Evento.IdOrganizador} tendra un evento pronto, {joinResult.Evento.Nombre} es en {(DateTime.ParseExact(joinResult.Evento.Fecha, "dd-MM-yyyy", CultureInfo.InvariantCulture) - currentDate).Days} dias"
+                        Notificacion = $"Una persona que sigues tendra un evento pronto, {joinResult.Evento.Nombre} es en {(DateTime.ParseExact(joinResult.Evento.Fecha, "dd-MM-yyyy", CultureInfo.InvariantCulture) - currentDate).Days} dias"
                     })
                     .ToList();
 
