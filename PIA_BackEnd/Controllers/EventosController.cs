@@ -42,6 +42,14 @@ namespace PIA_BackEnd.Controllers
             return Ok();
         }
 
+        [HttpPost("/Nueva Promocion")]
+        public async Task<ActionResult> PostPromo(Promocion promo)
+        {
+            dbContext.Add(promo);
+            await dbContext.SaveChangesAsync();
+            return Ok();
+        }
+
         [HttpDelete("/Cancelar Evento")]
         public async Task<ActionResult> Delete(int id)
         {

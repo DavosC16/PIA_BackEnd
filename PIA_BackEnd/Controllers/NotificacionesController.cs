@@ -97,5 +97,40 @@ namespace PIA_BackEnd.Controllers
             }
         }
 
+        [HttpGet("/MisPromociones")]
+
+        //ingresa id usuario, trae mensajes de promocion
+
+        public async Task<ActionResult<List<EventoDTO>>> GetPromo(int id_usuario)
+        {
+            var exist = await dbContext.Usuario.AnyAsync(u => u.Id == id_usuario);
+            if (!exist)
+            {
+                return BadRequest("Usuario No Encontrado");
+            }
+            else
+            {
+                var listaPromos = dbContext.Eventos
+                .Join(
+                dbContext.UsuarioRegistro,
+                evento => evento.Id,
+                usreg => usreg.IdEvento,
+                (evento, usreg) => new { Evento = evento, UsuarioRegistro = usreg }
+                )
+                .Join(
+                dbContext.Promocion,
+                joinResult => joinResult.UsuarioRegistro.IdEvento,
+                prom => prom.IdEvento,
+                (joinResult, prom) => new { Evento = joinResult.Evento, UsuarioRegistro = joinResult.UsuarioRegistro, Promocion = prom }
+                )
+                .Where(joinResult => joinResult.UsuarioRegistro.IdUsuario == id_usuario)
+                .Select(joinResult => new PromoDTO
+                {
+                Notificacion = $"Promocion nueva de evento: {joinResult.Evento.Nombre} ! {joinResult.Promocion.Mensaje}"
+                })
+                .ToList();
+                return Ok(listaPromos);
+            }
+        }
     }
 }
