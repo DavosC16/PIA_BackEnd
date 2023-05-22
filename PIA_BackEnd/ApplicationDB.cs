@@ -17,5 +17,7 @@ namespace PIA_BackEnd
         public DbSet<Seguidor> Seguidor { get; set; }
 
         public DbSet<Promocion> Promocion { get; set;}
+
+        public DbSet<Formulario> Formulario { get; set; }
     }
 }
