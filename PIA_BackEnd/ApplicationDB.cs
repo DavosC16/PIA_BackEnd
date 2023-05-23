@@ -13,5 +13,11 @@ namespace PIA_BackEnd
         public DbSet<Usuario> Usuario { get; set; }
 
         public DbSet<AsistenciaRegistrada> UsuarioRegistro { get; set; }
+
+        public DbSet<Seguidor> Seguidor { get; set; }
+
+        public DbSet<Promocion> Promocion { get; set;}
+
+        public DbSet<Formulario> Formulario { get; set; }
     }
 }

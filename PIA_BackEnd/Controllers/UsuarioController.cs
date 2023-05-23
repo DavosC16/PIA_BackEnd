@@ -15,14 +15,12 @@ namespace PIA_BackEnd.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly ApplicationDBContext dbContext;
-        private readonly IMapper _mapper;
-        private readonly IConfiguration configuration;
+        
 
-        public UsuarioController(ApplicationDBContext dbContext, IMapper mapper, IConfiguration configuration)
+        public UsuarioController(ApplicationDBContext dbContext)
         {
             this.dbContext = dbContext;
-            _mapper = mapper;
-            this.configuration = configuration;
+           
         }
 
         [HttpGet]

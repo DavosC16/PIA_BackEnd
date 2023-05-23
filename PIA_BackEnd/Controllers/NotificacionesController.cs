@@ -55,5 +55,82 @@ namespace PIA_BackEnd.Controllers
             }
         }
 
+        [HttpGet("/MisSeguidos")]
+
+        //ingresa id usuario, trae fechas eventos, si evento en menos de 1 mes -> trae notificacion
+
+        public async Task<ActionResult<List<EventoDTO>>> GetSeguidos(int id_usuario)
+        {
+            var exist = await dbContext.Usuario.AnyAsync(u => u.Id == id_usuario);
+            if (!exist)
+            {
+                return BadRequest("Usuario No Encontrado");
+            }
+            else
+            {
+                var idOrganizadorList = dbContext.Seguidor
+                .Where(seguidor => seguidor.IdUsuario == id_usuario)
+                .Select(seguidor => seguidor.IdOrganizador)
+                .ToList();
+
+                DateTime currentDate = DateTime.Now;
+                TimeSpan dateRange = TimeSpan.FromDays(30);
+
+                var listaEventos = dbContext.Eventos
+                    .Join(
+                        dbContext.Seguidor,
+                        evento => evento.IdOrganizador,
+                        seg => seg.IdOrganizador,
+                        (evento, seg) => new { Evento = evento, Seguidor = seg }
+                    )
+                    .Where(joinResult => idOrganizadorList.Contains(joinResult.Seguidor.IdOrganizador))
+                    .AsEnumerable()
+                    .Where(joinResult => DateTime.ParseExact(joinResult.Evento.Fecha, "dd-MM-yyyy", CultureInfo.InvariantCulture) >= currentDate - dateRange &&
+                                         DateTime.ParseExact(joinResult.Evento.Fecha, "dd-MM-yyyy", CultureInfo.InvariantCulture) <= currentDate + dateRange)
+                    .Select(joinResult => new EventoDTO
+                    {
+                        Notificacion = $"Una persona que sigues tendra un evento pronto, {joinResult.Evento.Nombre} es en {(DateTime.ParseExact(joinResult.Evento.Fecha, "dd-MM-yyyy", CultureInfo.InvariantCulture) - currentDate).Days} dias"
+                    })
+                    .ToList();
+
+                return Ok(listaEventos);
+            }
+        }
+
+        [HttpGet("/MisPromociones")]
+
+        //ingresa id usuario, trae mensajes de promocion
+
+        public async Task<ActionResult<List<EventoDTO>>> GetPromo(int id_usuario)
+        {
+            var exist = await dbContext.Usuario.AnyAsync(u => u.Id == id_usuario);
+            if (!exist)
+            {
+                return BadRequest("Usuario No Encontrado");
+            }
+            else
+            {
+                var listaPromos = dbContext.Eventos
+                .Join(
+                dbContext.UsuarioRegistro,
+                evento => evento.Id,
+                usreg => usreg.IdEvento,
+                (evento, usreg) => new { Evento = evento, UsuarioRegistro = usreg }
+                )
+                .Join(
+                dbContext.Promocion,
+                joinResult => joinResult.UsuarioRegistro.IdEvento,
+                prom => prom.IdEvento,
+                (joinResult, prom) => new { Evento = joinResult.Evento, UsuarioRegistro = joinResult.UsuarioRegistro, Promocion = prom }
+                )
+                .Where(joinResult => joinResult.UsuarioRegistro.IdUsuario == id_usuario)
+                .Select(joinResult => new PromoDTO
+                {
+                Notificacion = $"Promocion nueva de evento: {joinResult.Evento.Nombre} ! {joinResult.Promocion.Mensaje}"
+                })
+                .ToList();
+                return Ok(listaPromos);
+            }
+        }
     }
 }
