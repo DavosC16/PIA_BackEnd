@@ -88,5 +88,63 @@ namespace PIA_BackEnd.Controllers
                 return Ok(listaEventos);
             }
         }
+
+        [HttpPost("/Add Favoritos")]
+        [AllowAnonymous]
+        public async Task<ActionResult> PostFavoritos(int id_us, int id_ev)
+        {
+            var existUser = await dbContext.Usuario.AnyAsync(u => u.Id == id_us);
+            var existEvento = await dbContext.Eventos.AnyAsync(e => e.Id == id_ev);
+
+            if (!existUser)
+            {
+                return BadRequest("Usuario Inexistente");
+            }
+            else if (!existEvento)
+            {
+                return BadRequest("Evento Inexistente");
+            }
+            else
+            {
+                var newFavorite = new Favoritos
+                {
+                    IdUsuario = id_us,
+                    IdEvento = id_ev
+
+                };
+
+                dbContext.Favoritos.Add(newFavorite);
+                await dbContext.SaveChangesAsync();
+                return Ok();
+            }
+        }
+
+        [HttpGet("/Favoritos")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<Eventos>>> GetFavoritos(int Id_usuario)
+        {
+            var existUser = await dbContext.Usuario.AnyAsync(u => u.Id == Id_usuario);
+            if (!existUser)
+            {
+                return BadRequest("Usuario Inexistente");
+            }
+            else
+            {
+                var existFavorito = await dbContext.Favoritos.AnyAsync(f => f.IdUsuario == Id_usuario);
+                if (!existFavorito)
+                {
+                    return BadRequest("Sin Favoritos");
+                }
+                else
+                {
+                    var listaEventos = from eventos in dbContext.Eventos
+                                       join favoritos in dbContext.Favoritos
+                                       on eventos.Id equals favoritos.IdEvento
+                                       where favoritos.IdUsuario == Id_usuario
+                                       select eventos;
+                    return Ok(listaEventos);
+                }
+            }
+        }
     }
 }

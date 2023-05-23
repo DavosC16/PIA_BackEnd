@@ -26,7 +26,7 @@ namespace PIA_BackEnd.Controllers
             this.signInManager = signInManager;
         }
 
-        [HttpPost("registrar")]
+        [HttpPost("/registrar")]
         public async Task<ActionResult<RespuestaAutenticacion>> Registrar(CredencialesUsuario credenciales)
         {
             var user = new IdentityUser { UserName = credenciales.Mail, Email = credenciales.Mail };
@@ -44,7 +44,7 @@ namespace PIA_BackEnd.Controllers
             }
         }
 
-        [HttpPost("login")]
+        [HttpPost("/login")]
         public async Task<ActionResult<RespuestaAutenticacion>> Login(CredencialesUsuario credencialesUsuario)
         {
             var result = await signInManager.PasswordSignInAsync(credencialesUsuario.Mail,
@@ -61,7 +61,7 @@ namespace PIA_BackEnd.Controllers
 
         }
 
-        [HttpGet("RenovarToken")]
+        [HttpGet("/RenovarToken")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<RespuestaAutenticacion>> Renovar()
         {
@@ -109,7 +109,7 @@ namespace PIA_BackEnd.Controllers
             };
         }
 
-        [HttpPost("HacerAdmin")]
+        [HttpPost("/HacerAdmin")]
         public async Task<ActionResult> HacerAdmin(EditarAdminDTO editarAdminDTO)
         {
             var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Mail);
@@ -119,7 +119,7 @@ namespace PIA_BackEnd.Controllers
             return NoContent();
         }
 
-        [HttpPost("RemoverAdmin")]
+        [HttpPost("/RemoverAdmin")]
         public async Task<ActionResult> RemoverAdmin(EditarAdminDTO editarAdminDTO)
         {
             var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Mail);

@@ -19,5 +19,7 @@ namespace PIA_BackEnd
         public DbSet<Promocion> Promocion { get; set;}
 
         public DbSet<Formulario> Formulario { get; set; }
+
+        public DbSet<Favoritos> Favoritos { get; set; }
     }
 }
