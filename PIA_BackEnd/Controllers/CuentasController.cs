@@ -18,7 +18,7 @@ namespace PIA_BackEnd.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly IConfiguration configuration;
         private readonly SignInManager<IdentityUser> signInManager;
-        private EditarAdminDTO editarAdminDTO1;
+        //private EditarAdminDTO editarAdminDTO;
 
         public CuentasController(UserManager<IdentityUser> userManager, IConfiguration configuration,
             SignInManager<IdentityUser> signInManager)
@@ -36,8 +36,7 @@ namespace PIA_BackEnd.Controllers
 
             if (result.Succeeded)
             {
-                var usuario = await userManager.FindByEmailAsync(editarAdminDTO1.Mail);
-                await userManager.AddClaimAsync(usuario, new Claim("EsUsuario", "1"));
+                await userManager.AddClaimAsync(user, new Claim("EsUsuario", "1"));
                 return await ConstruirToken(credenciales);
             }
             else
