@@ -8,11 +8,12 @@ using System.Security.Claims;
 using System.Text;
 using PIA_BackEnd.Entidades;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace PIA_BackEnd.Controllers
 {
     [Route("api/usuarioseguido")]
-
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsUsuario")]
     public class SeguirController : ControllerBase
     {
         private readonly ApplicationDBContext dbContext;

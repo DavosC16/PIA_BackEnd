@@ -10,8 +10,8 @@ namespace PIA_BackEnd.Controllers
 {
     [ApiController]
     [Route("usuario")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsUsuario")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsUsuario")]
     public class UsuarioController : ControllerBase
     {
         private readonly ApplicationDBContext dbContext;
@@ -24,7 +24,7 @@ namespace PIA_BackEnd.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<ActionResult<List<GetUsuarioDTO>>> Get()
         {
             var usuarios = await dbContext.Usuario.ToListAsync();
@@ -42,7 +42,7 @@ namespace PIA_BackEnd.Controllers
 
 
         [HttpPost]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<ActionResult> Post([FromBody] UsuarioDTO usuarioDto)
         {
             var config = new MapperConfiguration(cfg =>
@@ -70,7 +70,7 @@ namespace PIA_BackEnd.Controllers
         }
 
         [HttpGet("/Eventos Registrados")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<ActionResult<List<Eventos>>> Get(int id)
         {
             var exist = await dbContext.Usuario.AnyAsync(x => x.Id == id);
@@ -90,7 +90,7 @@ namespace PIA_BackEnd.Controllers
         }
 
         [HttpPost("/Add Favoritos")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<ActionResult> PostFavoritos(int id_us, int id_ev)
         {
             var existUser = await dbContext.Usuario.AnyAsync(u => u.Id == id_us);
@@ -120,7 +120,7 @@ namespace PIA_BackEnd.Controllers
         }
 
         [HttpGet("/Favoritos")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<ActionResult<List<Eventos>>> GetFavoritos(int Id_usuario)
         {
             var existUser = await dbContext.Usuario.AnyAsync(u => u.Id == Id_usuario);

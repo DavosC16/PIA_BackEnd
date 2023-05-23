@@ -5,11 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using PIA_BackEnd.Entidades;
 using System.Globalization;
 using PIA_BackEnd.DTOs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PIA_BackEnd.Controllers
 {
     [ApiController]
     [Route("api/notificaciones")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsUsuario")]
     public class NotificacionesController : ControllerBase
     {
         private readonly ApplicationDBContext dbContext;

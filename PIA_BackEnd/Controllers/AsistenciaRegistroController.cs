@@ -8,10 +8,12 @@ using System.Security.Claims;
 using System.Text;
 using PIA_BackEnd.Entidades;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace PIA_BackEnd.Controllers
 {
     [Route("api/usuarioregistrado")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsUsuario")]
 
     public class AsistenciaRegistroController : ControllerBase
     {
