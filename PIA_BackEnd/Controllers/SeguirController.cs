@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace PIA_BackEnd.Controllers
 {
     [Route("api/usuarioseguido")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsUsuario")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
     public class SeguirController : ControllerBase
     {
         private readonly ApplicationDBContext dbContext;
@@ -23,6 +23,7 @@ namespace PIA_BackEnd.Controllers
         }
 
         [HttpPost("/Seguir organizador")]
+        //[AllowAnonymous]
         public async Task<ActionResult> SeguirOrganizador(int id_organizador, int id_usuario)
         {
             var usuarioexiste = await dbContext.Usuario.FindAsync(id_usuario);

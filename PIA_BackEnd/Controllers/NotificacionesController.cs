@@ -12,7 +12,7 @@ namespace PIA_BackEnd.Controllers
 {
     [ApiController]
     [Route("api/notificaciones")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsUsuario")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
     public class NotificacionesController : ControllerBase
     {
         private readonly ApplicationDBContext dbContext;
@@ -22,6 +22,7 @@ namespace PIA_BackEnd.Controllers
         }
 
         [HttpGet("/MisNotificaciones")]
+        //[AllowAnonymous]
 
         //ingresa id usuario, trae fechas eventos, si evento en menos de 1 mes -> trae notificacion
 
@@ -59,6 +60,7 @@ namespace PIA_BackEnd.Controllers
         }
 
         [HttpGet("/MisSeguidos")]
+        //[AllowAnonymous]
 
         //ingresa id usuario, trae fechas eventos, si evento en menos de 1 mes -> trae notificacion
 
@@ -101,6 +103,7 @@ namespace PIA_BackEnd.Controllers
         }
 
         [HttpGet("/MisPromociones")]
+        //[AllowAnonymous]
 
         //ingresa id usuario, trae mensajes de promocion
 

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace PIA_BackEnd.Controllers
 {
     [Route("api/usuarioregistrado")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsUsuario")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
 
     public class AsistenciaRegistroController : ControllerBase
     {
@@ -24,6 +24,7 @@ namespace PIA_BackEnd.Controllers
         }
 
         [HttpPost("/Ingresar Informacion del Registro")]
+        //[AllowAnonymous]
         public async Task<ActionResult> CrearAsistencia(int id_us,int id_ev)
         {
             var existingEvent = await dbContext.Eventos.FindAsync(id_ev);

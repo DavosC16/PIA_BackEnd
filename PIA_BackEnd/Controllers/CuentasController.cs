@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PIA_BackEnd.DTOs;
-using PIA_BackEnd.Entidades;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -18,7 +17,6 @@ namespace PIA_BackEnd.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly IConfiguration configuration;
         private readonly SignInManager<IdentityUser> signInManager;
-        //private EditarAdminDTO editarAdminDTO;
 
         public CuentasController(UserManager<IdentityUser> userManager, IConfiguration configuration,
             SignInManager<IdentityUser> signInManager)
@@ -28,15 +26,15 @@ namespace PIA_BackEnd.Controllers
             this.signInManager = signInManager;
         }
 
-        [HttpPost("/registrar")]
+        [HttpPost("registrar")]
         public async Task<ActionResult<RespuestaAutenticacion>> Registrar(CredencialesUsuario credenciales)
         {
-            var user = new IdentityUser { UserName = credenciales.Mail, Email = credenciales.Mail };
+            var user = new IdentityUser { UserName = credenciales.Email, Email = credenciales.Email };
             var result = await userManager.CreateAsync(user, credenciales.Password);
 
             if (result.Succeeded)
             {
-                await userManager.AddClaimAsync(user, new Claim("EsUsuario", "1"));
+                //Se retorna el Jwt (Json Web Token) especifica el formato del token que hay que devolverle a los clientes
                 return await ConstruirToken(credenciales);
             }
             else
@@ -45,10 +43,10 @@ namespace PIA_BackEnd.Controllers
             }
         }
 
-        [HttpPost("/login")]
+        [HttpPost("login")]
         public async Task<ActionResult<RespuestaAutenticacion>> Login(CredencialesUsuario credencialesUsuario)
         {
-            var result = await signInManager.PasswordSignInAsync(credencialesUsuario.Mail,
+            var result = await signInManager.PasswordSignInAsync(credencialesUsuario.Email,
                 credencialesUsuario.Password, isPersistent: false, lockoutOnFailure: false);
 
             if (result.Succeeded)
@@ -62,7 +60,7 @@ namespace PIA_BackEnd.Controllers
 
         }
 
-        [HttpGet("/RenovarToken")]
+        [HttpGet("RenovarToken")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<RespuestaAutenticacion>> Renovar()
         {
@@ -71,7 +69,7 @@ namespace PIA_BackEnd.Controllers
 
             var credenciales = new CredencialesUsuario()
             {
-                Mail = email
+                Email = email
             };
 
             return await ConstruirToken(credenciales);
@@ -80,17 +78,13 @@ namespace PIA_BackEnd.Controllers
 
         private async Task<RespuestaAutenticacion> ConstruirToken(CredencialesUsuario credencialesUsuario)
         {
-            //Informacion del usuario en la cual podemos confiar
-            //En los claim se pueden declarar cualquier variable, sin embargo, no debemos de declarar informacion
-            //del cliente sensible como pudiera ser una Tarjeta de Credito o contraseña
-
             var claims = new List<Claim>
             {
-                new Claim("email", credencialesUsuario.Mail),
+                new Claim("email", credencialesUsuario.Email),
                 new Claim("claimprueba", "Este es un claim de prueba")
             };
 
-            var usuario = await userManager.FindByEmailAsync(credencialesUsuario.Mail);
+            var usuario = await userManager.FindByEmailAsync(credencialesUsuario.Email);
             var claimsDB = await userManager.GetClaimsAsync(usuario);
 
             claims.AddRange(claimsDB);
@@ -110,20 +104,20 @@ namespace PIA_BackEnd.Controllers
             };
         }
 
-        [HttpPost("/HacerAdmin")]
+        [HttpPost("HacerAdmin")]
         public async Task<ActionResult> HacerAdmin(EditarAdminDTO editarAdminDTO)
         {
-            var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Mail);
+            var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Email);
 
             await userManager.AddClaimAsync(usuario, new Claim("EsAdmin", "1"));
 
             return NoContent();
         }
 
-        [HttpPost("/RemoverAdmin")]
+        [HttpPost("RemoverAdmin")]
         public async Task<ActionResult> RemoverAdmin(EditarAdminDTO editarAdminDTO)
         {
-            var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Mail);
+            var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Email);
 
             await userManager.RemoveClaimAsync(usuario, new Claim("EsAdmin", "1"));
 

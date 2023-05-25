@@ -9,9 +9,9 @@ using PIA_BackEnd.Entidades;
 namespace PIA_BackEnd.Controllers
 {
     [ApiController]
-    [Route("usuario")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsUsuario")]
+    [Route("api/usuario")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsUsuario")]
     public class UsuarioController : ControllerBase
     {
         private readonly ApplicationDBContext dbContext;
@@ -23,7 +23,7 @@ namespace PIA_BackEnd.Controllers
            
         }
 
-        [HttpGet]
+        [HttpGet("/Ver Usuario")]
         //[AllowAnonymous]
         public async Task<ActionResult<List<GetUsuarioDTO>>> Get()
         {
@@ -41,7 +41,7 @@ namespace PIA_BackEnd.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("/Usuario Nuevo")]
         //[AllowAnonymous]
         public async Task<ActionResult> Post([FromBody] UsuarioDTO usuarioDto)
         {

@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 
 namespace PIA_BackEnd.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsUsuario")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
     public class EventosPopultaresController: ControllerBase
     {
         private readonly ApplicationDBContext dbContext;

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PIA_BackEnd.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateIdentityUser : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,82 @@ namespace PIA_BackEnd.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Eventos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdOrganizador = table.Column<int>(type: "int", nullable: false),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Fecha = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Hora = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Ubicacion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MaxCapacidad = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Eventos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Favoritos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdUsuario = table.Column<int>(type: "int", nullable: false),
+                    IdEvento = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Favoritos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Formulario",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdOrganizador = table.Column<int>(type: "int", nullable: false),
+                    IdUsuario = table.Column<int>(type: "int", nullable: false),
+                    Mensaje = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Formulario", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Promocion",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdOrganizador = table.Column<int>(type: "int", nullable: false),
+                    IdEvento = table.Column<int>(type: "int", nullable: false),
+                    Mensaje = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Promocion", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Seguidor",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdOrganizador = table.Column<int>(type: "int", nullable: false),
+                    IdUsuario = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Seguidor", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -241,6 +317,21 @@ namespace PIA_BackEnd.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Eventos");
+
+            migrationBuilder.DropTable(
+                name: "Favoritos");
+
+            migrationBuilder.DropTable(
+                name: "Formulario");
+
+            migrationBuilder.DropTable(
+                name: "Promocion");
+
+            migrationBuilder.DropTable(
+                name: "Seguidor");
 
             migrationBuilder.DropTable(
                 name: "Usuario");

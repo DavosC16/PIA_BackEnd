@@ -6,6 +6,6 @@ namespace PIA_BackEnd.DTOs
     {
         [Required]
         [EmailAddress]
-        public string Mail { get; set; }
+        public string Email { get; set; }
     }
 }
